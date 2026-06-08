@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Georgia", serif;
+  
+  --color-substrate-50: #f8fafc;
+  --color-substrate-100: #f1f5f9;
+  --color-substrate-200: #F2F2F2;
+  --color-substrate-300: #cbd5e1;
+  --color-substrate-400: #888888;
+  --color-substrate-500: #555555;
+  --color-substrate-600: #444444;
+  --color-substrate-700: #333333;
+  --color-substrate-800: #222222;
+  --color-substrate-900: #111111;
+  --color-substrate-950: #0A0A0A;
+  
+  --color-accent-green: #00FF41;
+}
+
+@layer base {
+  body {
+    @apply bg-substrate-950 text-substrate-200 font-sans antialiased overflow-hidden;
+  }
+}
+
+.brutalist-border {
+  @apply border border-substrate-800;
+}
+
+.mono-label {
+  @apply font-mono text-[9px] uppercase tracking-[0.3em] font-bold text-substrate-500;
+}
+
+.heading-serif {
+  @apply font-serif italic font-black tracking-tighter;
+}
+
+.terminal-box {
+  @apply bg-substrate-900 border border-substrate-800 p-4 font-mono text-[10px] leading-relaxed text-accent-green;
+}
