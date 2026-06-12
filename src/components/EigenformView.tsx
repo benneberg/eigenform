@@ -6,9 +6,9 @@ import { Eye, Activity, Target, Shield, Microscope } from "lucide-react";
 const ROLES = [
   { id: ObserverRole.NEUTRAL, label: "Neutral Substrate", icon: Eye, activeClass: "text-substrate-400", bg: "#444" },
   { id: ObserverRole.SRE, label: "System Reliability", icon: Activity, activeClass: "text-accent-green", bg: "#00FF41" },
-  { id: ObserverRole.MARKETER, label: "Growth Observer", icon: Target, activeClass: "text-white", bg: "#f2f2f2" },
+  { id: ObserverRole.OPERATOR, label: "Efficiency Lens", icon: Target, activeClass: "text-white", bg: "#f2f2f2" },
   { id: ObserverRole.SECURITY, label: "Secure Boundary", icon: Shield, activeClass: "text-red-500", bg: "#ef4444" },
-  { id: ObserverRole.RESEARCHER, label: "Conceptual Layer", icon: Microscope, activeClass: "text-blue-500", bg: "#3b82f6" },
+  { id: ObserverRole.ARCHITECT, label: "Topology Layer", icon: Microscope, activeClass: "text-blue-500", bg: "#3b82f6" },
 ];
 
 export default function EigenformView() {
@@ -24,19 +24,19 @@ export default function EigenformView() {
         </p>
       </header>
 
-      <div className="flex gap-1 p-1 bg-substrate-900 border border-substrate-800 w-fit">
+      <div className="flex flex-wrap gap-1 p-1 bg-substrate-900 border border-substrate-800 w-fit">
         {ROLES.map((role) => {
           const Icon = role.icon;
           const isActive = activeRole === role.id;
           return (
             <button
               key={role.id}
-              onClick={() => setActiveRole(role.id)}
+              onClick={() => setActiveRole(role.id as ObserverRole)}
               className={`flex items-center gap-2 px-6 py-3 text-[10px] font-bold uppercase tracking-widest transition-all ${
                 isActive ? "bg-substrate-200 text-black" : "text-substrate-500 hover:text-substrate-300"
               }`}
             >
-              <Icon size={14} className={isActive ? "" : ""} />
+              <Icon size={14} />
               {role.label}
             </button>
           );
@@ -57,15 +57,14 @@ export default function EigenformView() {
               <div className="flex justify-between items-start mb-12">
                 <div className="space-y-1">
                   <div className="font-mono text-[9px] uppercase tracking-[0.3em] font-bold flex items-center gap-2 text-black/50">
-                    <div className="w-2 h-2 bg-black animate-pulse" />
                     Collapse Result: {activeRole} Node 0x{(Math.random() * 0xFFF | 0).toString(16).toUpperCase()}
                   </div>
                   <h3 className="heading-serif text-6xl py-4 leading-tight">
-                    "{activeRole === ObserverRole.NEUTRAL && "Latent data fabric waiting for intent."}"
+                    {activeRole === ObserverRole.NEUTRAL && "Latent data fabric waiting for intent."}
                     {activeRole === ObserverRole.SRE && "The system renders as a performance lattice."}
-                    {activeRole === ObserverRole.MARKETER && "The substrate becomes a recursive funnel."}
+                    {activeRole === ObserverRole.OPERATOR && "Substrate density indicates high efficiency."}
                     {activeRole === ObserverRole.SECURITY && "Observation collapses into threat vectors."}
-                    {activeRole === ObserverRole.RESEARCHER && "Recursive feedback analysis instantiated."}
+                    {activeRole === ObserverRole.ARCHITECT && "Recursive feedback analysis instantiated."}
                   </h3>
                 </div>
                 <div className="absolute top-0 right-0 p-8 text-right opacity-20">

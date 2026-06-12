@@ -5,9 +5,25 @@
 export enum ObserverRole {
   NEUTRAL = "NEUTRAL",
   SRE = "SRE",
-  MARKETER = "MARKETER",
   SECURITY = "SECURITY",
-  RESEARCHER = "RESEARCHER"
+  ARCHITECT = "ARCHITECT",
+  OPERATOR = "OPERATOR"
+}
+
+export type IntentType = "STABILITY" | "EFFICIENCY" | "SECURITY" | "DISCOVERY";
+
+export interface ObserverIntent {
+  type: IntentType;
+  primaryMetric: string;
+  focusNodes: string[]; // IDs of nodes the observer is interested in
+  threshold: number;
+}
+
+export interface SubstrateEvent {
+  timestamp: string;
+  nodeId: string;
+  change: string;
+  magnitude: number;
 }
 
 export interface SystemNode {
@@ -23,6 +39,20 @@ export interface Metric {
   value: string | number;
   unit?: string;
   trend?: "UP" | "DOWN" | "STABLE";
+}
+
+export interface SubstrateNode extends SystemNode {
+  entropy: number;
+  semanticDepth: number;
+  lastTransition: string;
+}
+
+export interface ObservationGap {
+  id: string;
+  source: string;
+  phenomenon: string;
+  severity: "LOW" | "MEDIUM" | "HIGH";
+  description: string;
 }
 
 export interface ConceptDefinition {

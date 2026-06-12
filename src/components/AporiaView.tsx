@@ -1,21 +1,18 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, AlertTriangle, EyeOff, Sparkles } from "lucide-react";
+import { Search, AlertTriangle, EyeOff, Sparkles, Zap } from "lucide-react";
+import { INITIAL_SUBSTRATE, analyzeAporia } from "../lib/eigenform-core";
+import { ObservationGap } from "../types";
 
 export default function AporiaView() {
   const [isProbing, setIsProbing] = useState(false);
-  const [probesFound, setProbesFound] = useState<string[]>([]);
+  const [probesFound, setProbesFound] = useState<ObservationGap[]>([]);
 
   const handleProbe = () => {
     setIsProbing(true);
     setTimeout(() => {
-      const newFindings = [
-        "Unmetered recursion in sector G-4",
-        "Substrate jitter outside 3-sigma bound",
-        "Semantic drift in latent gateways",
-        "Ghost interactions in observer node"
-      ].sort(() => Math.random() - 0.5).slice(0, 2);
-      setProbesFound(prev => Array.from(new Set([...newFindings, ...prev])).slice(0, 4));
+      const g = analyzeAporia(INITIAL_SUBSTRATE);
+      setProbesFound(g);
       setIsProbing(false);
     }, 1500);
   };
@@ -25,8 +22,8 @@ export default function AporiaView() {
       <header className="space-y-4">
         <h2 className="heading-serif text-4xl md:text-5xl text-white">Aporia</h2>
         <p className="text-substrate-400 max-w-2xl text-sm md:text-base leading-relaxed">
-          Identifying blind spots in predefined observability. Aporia reveals the "unknown unknowns"—the complexity 
-          that exists outside current measurement frameworks.
+          The module for identifying blind spots. Aporia reveals interactions occurring outside predefined metrics, 
+          highlighting the drift between system reality and observer measurement.
         </p>
       </header>
 
@@ -47,41 +44,44 @@ export default function AporiaView() {
                 </div>
               </motion.div>
               <div className="space-y-2 md:space-y-4">
-                <h3 className="heading-serif text-3xl md:text-5xl text-white">Beyond the Horizon</h3>
+                <h3 className="heading-serif text-3xl md:text-5xl text-white">Observability Void</h3>
                 <p className="text-[10px] font-mono text-substrate-500 max-w-sm uppercase tracking-widest leading-relaxed">
-                  Metrics terminator. Observable collapse predicted.
+                  Analyzing substrate for unmetered phenomena
                 </p>
               </div>
               
               <div className="grid grid-cols-3 gap-6 md:gap-16 mt-8 md:mt-12 w-full pt-8 md:pt-12 border-t border-substrate-900">
                 <div className="flex flex-col gap-1 md:gap-2">
-                  <p className="mono-label !text-[7px]">Semantic Depth</p>
-                  <motion.p 
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 4, repeat: Infinity }}
-                    className="text-2xl md:text-4xl text-white heading-serif"
-                  >∞ Ω</motion.p>
+                  <p className="mono-label !text-[7px]">Measured</p>
+                  <p className="text-2xl md:text-3xl font-black text-white italic" style={{ fontFamily: 'Georgia, serif' }}>
+                    {INITIAL_SUBSTRATE.length}
+                  </p>
                 </div>
                 <div className="flex flex-col gap-1 md:gap-2">
-                   <p className="mono-label !text-[7px]">Unmeasurables</p>
-                   <p className="text-2xl md:text-3xl font-black italic text-white" style={{ fontFamily: 'Georgia, serif' }}>1,402</p>
+                   <p className="mono-label !text-[7px]">Unknowns</p>
+                   <p className="text-2xl md:text-3xl font-black italic text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                    {probesFound.length || "?"}
+                   </p>
                 </div>
                 <div className="flex flex-col gap-1 md:gap-2">
                    <p className="mono-label !text-[7px]">Blind Ratio</p>
-                   <p className="text-2xl md:text-3xl font-black text-white" style={{ fontFamily: 'Georgia, serif' }}>0.94</p>
+                   <p className="text-2xl md:text-3xl font-black text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                    {((probesFound.length / INITIAL_SUBSTRATE.length) || 0.44).toFixed(2)}
+                   </p>
                 </div>
               </div>
            </div>
         </div>
 
-        <div className="bg-substrate-950 flex flex-col p-6 md:p-12 md:space-y-10 border-t lg:border-t-0 border-substrate-800">
+        <div className="bg-substrate-950 flex flex-col p-6 md:p-12 md:space-y-10 border-t lg:border-t-0 border-substrate-800 lg:overflow-y-auto">
            <div className="space-y-6">
               <div className="flex items-center gap-3 text-white">
                 <AlertTriangle size={20} className="text-white" />
-                <span className="heading-serif text-xl md:text-2xl">Observability Gaps</span>
+                <span className="heading-serif text-xl md:text-2xl">Gap Analysis</span>
               </div>
               <p className="text-xs text-substrate-400 leading-relaxed">
-                Traditional telemetry protocols are currently blind to non-metric events. Eigenform suggests probing for recursive feedback loops.
+                Observers are often trapped in a hallucination of control. 
+                Running Aporia probes identifies where the substrate is diverging from measurement.
               </p>
               <button 
                 onClick={handleProbe}
@@ -90,30 +90,37 @@ export default function AporiaView() {
                   isProbing ? "bg-substrate-500 cursor-not-allowed" : "bg-substrate-200 hover:bg-white"
                 }`}
               >
-                {isProbing ? <Sparkles size={14} className="animate-spin" /> : <Search size={14} />}
-                {isProbing ? "Probing..." : "Initiate Probe"}
+                {isProbing ? <Sparkles size={14} className="animate-spin" /> : <Zap size={14} />}
+                {isProbing ? "Analyzing..." : "Probe Substrate"}
               </button>
            </div>
 
            <div className="space-y-6 md:space-y-8 border-t border-substrate-900 pt-8 mt-8 md:mt-0">
-              <h4 className="mono-label">Scouted Blind Spots</h4>
-              <div className="space-y-4 md:space-y-6 min-h-[100px]">
+              <h4 className="mono-label">Observation Gaps Identifed</h4>
+              <div className="space-y-6 min-h-[100px]">
                  <AnimatePresence mode="popLayout">
                    {probesFound.length > 0 ? (
-                     probesFound.map((t, i) => (
+                     probesFound.map((gap, i) => (
                        <motion.div 
-                        key={t}
+                        key={gap.id}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 10 }}
-                        className="flex gap-4 items-center group cursor-pointer hover:bg-white/5 p-2 -mx-2 transition-colors"
+                        className="flex flex-col gap-2 p-4 bg-white/5 border-l-2 border-white/20 transition-colors"
                        >
-                         <span className="mono-label opacity-20 !tracking-normal">0{i+1}</span>
-                         <p className="text-[9px] md:text-[10px] text-substrate-200 font-mono tracking-widest uppercase">{t}</p>
+                         <div className="flex justify-between items-center">
+                            <span className="mono-label !text-[7px] text-white/40">SRC::{gap.source}</span>
+                            <span className={`text-[7px] font-mono px-2 py-0.5 border ${
+                               gap.severity === 'HIGH' ? 'border-red-500 text-red-500' : 
+                               gap.severity === 'MEDIUM' ? 'border-orange-500 text-orange-500' : 'border-blue-500 text-blue-500'
+                            }`}>{gap.severity}</span>
+                         </div>
+                         <p className="text-[10px] text-white font-bold tracking-widest uppercase">{gap.phenomenon}</p>
+                         <p className="text-[9px] text-substrate-400 leading-relaxed italic">{gap.description}</p>
                        </motion.div>
                      ))
                    ) : (
-                     <p className="text-[10px] text-substrate-700 italic uppercase tracking-widest">No probes logged yet.</p>
+                     <p className="text-[10px] text-substrate-700 italic uppercase tracking-widest">Awaiting substrate probe...</p>
                    )}
                  </AnimatePresence>
               </div>
