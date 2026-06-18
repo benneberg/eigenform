@@ -45,6 +45,7 @@ export interface SubstrateNode extends SystemNode {
   entropy: number;
   semanticDepth: number;
   lastTransition: string;
+  significance: number; // 0 to 1, inherent importance of the node
 }
 
 export interface ObservationGap {

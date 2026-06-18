@@ -21,10 +21,11 @@ export default function TellerView() {
         magnitude: Math.random() * 0.5
       };
 
-      const text = generateNarration(event, intent);
+      const result = generateNarration(event, intent);
       const newLog = { 
         id: nextId.current++, 
-        text, 
+        text: result.narration,
+        meaning: result.meaning,
         time: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) 
       };
       setLogs(prev => [newLog, ...prev].slice(0, 50));
@@ -39,36 +40,54 @@ export default function TellerView() {
       <header className="space-y-4">
         <h2 className="heading-serif text-4xl md:text-5xl text-white">Teller</h2>
         <p className="text-substrate-400 max-w-2xl text-sm md:text-base leading-relaxed">
-          Pure observational narration based on current context. The Teller does not infer motive—it merely
-          witnesses the recursive transitions of the substrate through the lens of active intent.
+          The primary interface for meaning generation. The Teller witnesses substrate transitions 
+          and generates context-specific meaning by collapsing raw data into the observer's specific intent.
         </p>
       </header>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-px bg-substrate-800 brutalist-border overflow-hidden lg:overflow-visible">
-        <div className="lg:col-span-2 bg-[#000] p-0 flex flex-col overflow-hidden relative min-h-[300px]">
+        <div className="lg:col-span-2 bg-[#000] p-0 flex flex-col overflow-hidden relative min-h-[400px]">
            <div className="p-4 md:p-6 border-b border-substrate-900 bg-substrate-950 flex justify-between items-center z-10">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-accent-green animate-pulse" />
-                <span className="mono-label !text-[8px] md:!text-[10px]">Pure Stream :: {selectedIntentKey} lens</span>
+                <span className="mono-label !text-[8px] md:!text-[10px]">Active Observation Stream :: {selectedIntentKey} lens</span>
               </div>
-              <span className="mono-label opacity-40 !text-[8px] md:!text-[10px]">:: NARRATION_ID_{nextId.current} ::</span>
+              <span className="mono-label opacity-40 !text-[8px] md:!text-[10px]">SITUATION_拓扑 :: NARRATION_{nextId.current}</span>
            </div>
            
-           <div className="flex-1 p-4 md:p-6 space-y-3 md:space-y-4 overflow-y-auto font-mono scrollbar-hide relative z-10">
+           <div className="flex-1 p-4 md:p-6 space-y-6 overflow-y-auto font-mono scrollbar-hide relative z-10">
               <AnimatePresence initial={false} mode="popLayout">
                 {logs.length === 0 && (
-                   <p className="text-substrate-800 text-xs italic">Waiting for substrate transition...</p>
+                   <div className="flex flex-col items-center justify-center h-full opacity-20">
+                      <Eye size={40} className="mb-4" />
+                      <p className="text-sm uppercase tracking-widest">Waiting for collapse...</p>
+                   </div>
                 )}
                 {logs.map((log) => (
                   <motion.div
                     key={log.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="flex gap-4 md:gap-8 group"
+                    className="space-y-2 border-l border-white/10 pl-6 relative"
                    >
-                    <span className="text-substrate-600 shrink-0 tabular-nums text-[9px] md:text-xs">[{log.time}]</span>
-                    <span className="text-white/80 flex-1 tracking-tight text-[9px] md:text-xs leading-tight font-mono">{log.text}</span>
+                    <div className="absolute left-0 top-0 w-1 h-full bg-accent-green/20" />
+                    <div className="flex justify-between items-center">
+                       <span className="text-substrate-600 tabular-nums text-[9px] md:text-xs">[{log.time}] SUBSTRATE_EVENT:</span>
+                       <span className="text-[8px] text-substrate-500 uppercase">ID: {log.id}</span>
+                    </div>
+                    <p className="text-white/60 tracking-tight text-[10px] md:text-[11px] leading-snug font-mono italic">
+                      "{log.text}"
+                    </p>
+                    <div className="bg-substrate-900/50 p-3 mt-2 border border-white/5">
+                       <div className="flex items-center gap-2 mb-1">
+                          <Target size={10} className="text-accent-green" />
+                          <span className="text-[8px] text-white/40 uppercase tracking-tighter font-bold">Generated Meaning</span>
+                       </div>
+                       <p className="text-accent-green text-[11px] md:text-xs uppercase tracking-tight font-bold">
+                         {log.meaning}
+                       </p>
+                    </div>
                   </motion.div>
                 ))}
               </AnimatePresence>

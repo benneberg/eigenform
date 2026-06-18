@@ -94,16 +94,31 @@ export default function SatisficeView() {
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-end">
-                      <p className="mono-label !text-[7px]">{intent.primaryMetric === 'semanticDepth' ? 'FOCAL_DEPTH' : 'Semantic Depth'}</p>
-                      <p className="font-mono text-xs text-white">{(node.semanticDepth * 100).toFixed(0)}%</p>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                       <div className="flex justify-between items-end">
+                         <p className="mono-label !text-[7px]">{intent.primaryMetric === 'semanticDepth' ? 'FOCAL_DEPTH' : 'Semantic Depth'}</p>
+                         <p className="font-mono text-xs text-white">{(node.semanticDepth * 100).toFixed(0)}%</p>
+                       </div>
+                       <div className="h-1 bg-substrate-950 border border-substrate-800 overflow-hidden">
+                         <motion.div 
+                           className="h-full bg-white/20"
+                           animate={{ width: `${node.semanticDepth * 100}%` }}
+                         />
+                       </div>
                     </div>
-                    <div className="h-1 bg-substrate-950 border border-substrate-800 overflow-hidden">
-                      <motion.div 
-                        className="h-full bg-white/20"
-                        animate={{ width: `${node.semanticDepth * 100}%` }}
-                      />
+
+                    <div className="space-y-2">
+                       <div className="flex justify-between items-end">
+                         <p className="mono-label !text-[7px]">Structural Significance</p>
+                         <p className="font-mono text-xs text-white">{(node.significance * 100).toFixed(0)}%</p>
+                       </div>
+                       <div className="h-1 bg-substrate-950 border border-substrate-800 overflow-hidden">
+                         <motion.div 
+                           className="h-full bg-accent-green/40"
+                           animate={{ width: `${node.significance * 100}%` }}
+                         />
+                       </div>
                     </div>
                   </div>
 
@@ -113,8 +128,8 @@ export default function SatisficeView() {
                       <p className="font-mono text-[9px] text-substrate-400">{node.entropy.toFixed(3)} Φ</p>
                     </div>
                     <div className="space-y-1 text-right">
-                      <p className="mono-label !text-[6px]">ID</p>
-                      <p className="font-mono text-[9px] text-substrate-400">{node.id.toUpperCase()}</p>
+                      <p className="mono-label !text-[6px]">Node Load</p>
+                      <p className="font-mono text-[9px] text-substrate-400">{node.load}% Capacity</p>
                     </div>
                   </div>
                 </motion.div>

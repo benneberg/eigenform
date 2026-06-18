@@ -4,6 +4,11 @@ Eigenform is an **Observer-Relative Adaptive Systems Framework** designed to mod
 
 This repository implements the core conceptual modules of the Eigenform specification, providing a real-time simulation of system state collapse, latent service instantiation, and non-judgmental observational narration.
 
+## Documentation
+- **[PURPOSE.md](./PURPOSE.md)**: Product vision, target audience, and value proposition.
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)**: Technical overview of the Intent/Collapse cycle and core modules.
+- **[TODO.md](./TODO.md)**: Code review feedback and future development roadmap.
+
 ## 核心概念 (Core Concepts)
 
 ### 1. Eigenform
