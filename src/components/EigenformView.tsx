@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ObserverRole } from "../types";
 import { Eye, Activity, Target, Shield, Microscope } from "lucide-react";
+import { useSubstrate } from "../context/SubstrateContext";
 
 const ROLES = [
   { id: ObserverRole.NEUTRAL, label: "Neutral Substrate", icon: Eye, activeClass: "text-substrate-400", bg: "#444" },
@@ -12,7 +12,7 @@ const ROLES = [
 ];
 
 export default function EigenformView() {
-  const [activeRole, setActiveRole] = useState<ObserverRole>(ObserverRole.NEUTRAL);
+  const { activeRole, setActiveRole } = useSubstrate();
 
   return (
     <div className="h-full flex flex-col gap-10">
@@ -33,7 +33,7 @@ export default function EigenformView() {
               key={role.id}
               onClick={() => setActiveRole(role.id as ObserverRole)}
               className={`flex items-center gap-2 px-6 py-3 text-[10px] font-bold uppercase tracking-widest transition-all ${
-                isActive ? "bg-substrate-200 text-black" : "text-substrate-500 hover:text-substrate-300"
+                isActive ? "bg-substrate-200 text-black font-bold" : "text-substrate-500 hover:text-substrate-300"
               }`}
             >
               <Icon size={14} />
@@ -57,7 +57,7 @@ export default function EigenformView() {
               <div className="flex justify-between items-start mb-12">
                 <div className="space-y-1">
                   <div className="font-mono text-[9px] uppercase tracking-[0.3em] font-bold flex items-center gap-2 text-black/50">
-                    Collapse Result: {activeRole} Node 0x{(Math.random() * 0xFFF | 0).toString(16).toUpperCase()}
+                    Collapse Result: {activeRole} Node Active
                   </div>
                   <h3 className="heading-serif text-6xl py-4 leading-tight">
                     {activeRole === ObserverRole.NEUTRAL && "Latent data fabric waiting for intent."}
@@ -80,7 +80,7 @@ export default function EigenformView() {
                     Meaning is not intrinsic. Your intent has forced the underlying substrate to collapse into a stable observational form.
                   </p>
                   <div className="flex gap-12 font-mono text-[10px] pt-4 border-t border-black/10">
-                    <div><span className="opacity-40 block mb-1">BIAS</span> {activeRole === ObserverRole.NEUTRAL ? "0.00" : (Math.random() * 0.9).toFixed(3)}</div>
+                    <div><span className="opacity-40 block mb-1">BIAS</span> {activeRole === ObserverRole.NEUTRAL ? "0.00" : "0.412"}</div>
                     <div><span className="opacity-40 block mb-1">STABILITY</span> 0.999%</div>
                     <div><span className="opacity-40 block mb-1">ENTROPY</span> 0.12 η</div>
                   </div>

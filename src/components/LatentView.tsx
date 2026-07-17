@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Zap, Activity, CloudRain, Cpu } from "lucide-react";
+import { useSubstrate } from "../context/SubstrateContext";
 
 interface LatentService {
   id: string;
@@ -17,17 +18,22 @@ const SERVICES: LatentService[] = [
 ];
 
 export default function LatentView() {
+  const { driftSpeed } = useSubstrate();
   const [activeServices, setActiveServices] = useState<string[]>([]);
 
   useEffect(() => {
     const updateActive = () => {
+      if (driftSpeed === 0) return;
       const active = SERVICES.filter(() => Math.random() > 0.4).map(s => s.id);
       setActiveServices(active);
     };
     updateActive();
-    const interval = setInterval(updateActive, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    
+    if (driftSpeed > 0) {
+      const interval = setInterval(updateActive, 3000 / driftSpeed);
+      return () => clearInterval(interval);
+    }
+  }, [driftSpeed]);
 
   return (
     <div className="h-full flex flex-col gap-6 md:gap-10">

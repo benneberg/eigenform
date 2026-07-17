@@ -39,4 +39,27 @@ describe('Eigenform Core Logic', () => {
     const ghostGaps = analyzeAporia(customNodes);
     expect(ghostGaps.some(g => g.id === 'gap-ghost-ghost')).toBe(true);
   });
+
+  it('should detect cross-node recursive loop gaps when multiple active nodes are high stress', () => {
+    const stressNodes = [
+      { id: "node-a", name: "Service A", type: "SERVICE", status: "ACTIVE", load: 80, entropy: 0.2, semanticDepth: 0.5, lastTransition: "", significance: 0.5 },
+      { id: "node-b", name: "Service B", type: "SERVICE", status: "ACTIVE", load: 10, entropy: 0.7, semanticDepth: 0.5, lastTransition: "", significance: 0.5 },
+    ] as any;
+    
+    const gaps = analyzeAporia(stressNodes);
+    expect(gaps.some(g => g.id === 'gap-recursive-loop')).toBe(true);
+  });
+
+  it('should support integration flows for observer role transitions', () => {
+    // SRE focus
+    const sreIntent = OBSERVER_INTENTS.SRE;
+    const sreSatisficed = renderSatisfice(INITIAL_SUBSTRATE, sreIntent);
+    expect(sreSatisficed.some(n => n.id === 'node-0')).toBe(true); // Core Sieve is focus
+
+    // Transition to Security
+    const secIntent = OBSERVER_INTENTS.SECURITY;
+    const secSatisficed = renderSatisfice(INITIAL_SUBSTRATE, secIntent);
+    expect(secSatisficed.some(n => n.id === 'node-2')).toBe(true); // Auth Ghost is focus
+    expect(secSatisficed.some(n => n.id === 'node-0')).toBe(false); // Core Sieve not focus in Security
+  });
 });

@@ -54,6 +54,18 @@ export function analyzeAporia(nodes: SubstrateNode[]): ObservationGap[] {
     }
   });
 
+  // Cross-node recursive feedback loop detection
+  const activeHighStressNodes = nodes.filter(n => n.status === "ACTIVE" && (n.load > 60 || n.entropy > 0.5));
+  if (activeHighStressNodes.length >= 2) {
+    gaps.push({
+      id: "gap-recursive-loop",
+      source: activeHighStressNodes.map(n => n.name).join(" ↔ "),
+      phenomenon: "Cross-Node Recursive Loop",
+      severity: "HIGH",
+      description: `Potential self-reinforcing feedback loop identified between ${activeHighStressNodes.map(n => `'${n.name}'`).join(" and ")}. Signal is cycling recursively, escalating entropy.`
+    });
+  }
+
   return gaps;
 }
 

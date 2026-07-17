@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, AlertTriangle, EyeOff, Sparkles, Zap } from "lucide-react";
-import { INITIAL_SUBSTRATE, analyzeAporia } from "../lib/eigenform-core";
+import { AlertTriangle, EyeOff, Sparkles, Zap } from "lucide-react";
+import { useSubstrate } from "../context/SubstrateContext";
 import { ObservationGap } from "../types";
 
 export default function AporiaView() {
+  const { nodes, aporiaGaps } = useSubstrate();
   const [isProbing, setIsProbing] = useState(false);
   const [probesFound, setProbesFound] = useState<ObservationGap[]>([]);
+  const [hasProbed, setHasProbed] = useState(false);
 
   const handleProbe = () => {
     setIsProbing(true);
     setTimeout(() => {
-      const g = analyzeAporia(INITIAL_SUBSTRATE);
-      setProbesFound(g);
+      // Fetch fresh, live gaps from our centralized engine
+      setProbesFound(aporiaGaps);
+      setHasProbed(true);
       setIsProbing(false);
-    }, 1500);
+    }, 1200);
   };
 
   return (
@@ -32,15 +35,15 @@ export default function AporiaView() {
            {/* Abstract Complexity Grid */}
            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #888 0%, transparent 1%)', backgroundSize: '40px 40px' }} />
 
-           <div className="relative z-10 flex flex-col items-center text-center gap-6 md:gap-8 max-w-lg">
+           <div className="relative z-10 flex flex-col items-center text-center gap-6 md:gap-8 max-w-lg w-full">
               <motion.div 
                 animate={isProbing ? { rotate: [12, -12, 12], scale: [1, 1.1, 1] } : {}}
                 transition={{ duration: 1, repeat: Infinity }}
                 className="relative"
               >
                 <div className="w-24 h-24 md:w-32 md:h-32 brutalist-border bg-substrate-950 flex items-center justify-center transform rotate-12 relative">
-                   <div className="absolute inset-2 border border-dashed border-substrate-800 rounded-full" />
-                   <EyeOff size={32} className="text-white md:size-[48px] -rotate-12" />
+                    <div className="absolute inset-2 border border-dashed border-substrate-800 rounded-full" />
+                    <EyeOff size={32} className="text-white md:size-[48px] -rotate-12" />
                 </div>
               </motion.div>
               <div className="space-y-2 md:space-y-4">
@@ -50,31 +53,32 @@ export default function AporiaView() {
                 </p>
               </div>
               
-              <div className="grid grid-cols-3 gap-6 md:gap-16 mt-8 md:mt-12 w-full pt-8 md:pt-12 border-t border-substrate-900">
+              <div className="grid grid-cols-3 gap-4 sm:gap-6 md:gap-16 mt-6 md:mt-12 w-full pt-6 md:pt-12 border-t border-substrate-900">
                 <div className="flex flex-col gap-1 md:gap-2">
-                  <p className="mono-label !text-[7px]">Measured</p>
-                  <p className="text-2xl md:text-3xl font-black text-white italic" style={{ fontFamily: 'Georgia, serif' }}>
-                    {INITIAL_SUBSTRATE.length}
+                  <p className="mono-label !text-[7px]">Measured Nodes</p>
+                  <p className="text-xl md:text-3xl font-black text-white italic" style={{ fontFamily: 'Georgia, serif' }}>
+                    {nodes.length}
                   </p>
                 </div>
                 <div className="flex flex-col gap-1 md:gap-2">
-                   <p className="mono-label !text-[7px]">Unknowns</p>
-                   <p className="text-2xl md:text-3xl font-black italic text-white" style={{ fontFamily: 'Georgia, serif' }}>
-                    {probesFound.length || "?"}
+                   <p className="mono-label !text-[7px]">Identified Gaps</p>
+                   <p className="text-xl md:text-3xl font-black italic text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                    {hasProbed ? probesFound.length : "?"}
                    </p>
                 </div>
                 <div className="flex flex-col gap-1 md:gap-2">
                    <p className="mono-label !text-[7px]">Blind Ratio</p>
-                   <p className="text-2xl md:text-3xl font-black text-white" style={{ fontFamily: 'Georgia, serif' }}>
-                    {((probesFound.length / INITIAL_SUBSTRATE.length) || 0.44).toFixed(2)}
+                   <p className="text-xl md:text-3xl font-black text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                    {hasProbed ? ((probesFound.length / nodes.length) || 0).toFixed(2) : "0.00"}
                    </p>
                 </div>
               </div>
            </div>
         </div>
 
-        <div className="bg-substrate-950 flex flex-col p-6 md:p-12 md:space-y-10 border-t lg:border-t-0 border-substrate-800 lg:overflow-y-auto">
-           <div className="space-y-6">
+        {/* Mobile-Optimized Gap list and probe actions panel */}
+        <div className="bg-substrate-950 flex flex-col p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 border-t lg:border-t-0 border-substrate-800 lg:overflow-y-auto">
+           <div className="space-y-4">
               <div className="flex items-center gap-3 text-white">
                 <AlertTriangle size={20} className="text-white" />
                 <span className="heading-serif text-xl md:text-2xl">Gap Analysis</span>
@@ -86,8 +90,8 @@ export default function AporiaView() {
               <button 
                 onClick={handleProbe}
                 disabled={isProbing}
-                className={`w-full mt-4 py-4 px-6 text-black text-[10px] font-bold uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-2 ${
-                  isProbing ? "bg-substrate-500 cursor-not-allowed" : "bg-substrate-200 hover:bg-white"
+                className={`w-full mt-2 py-3 px-4 text-black text-[10px] font-bold uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-2 min-h-[44px] ${
+                  isProbing ? "bg-substrate-500 cursor-not-allowed" : "bg-substrate-200 hover:bg-white cursor-pointer"
                 }`}
               >
                 {isProbing ? <Sparkles size={14} className="animate-spin" /> : <Zap size={14} />}
@@ -95,33 +99,43 @@ export default function AporiaView() {
               </button>
            </div>
 
-           <div className="space-y-6 md:space-y-8 border-t border-substrate-900 pt-8 mt-8 md:mt-0">
-              <h4 className="mono-label">Observation Gaps Identifed</h4>
-              <div className="space-y-6 min-h-[100px]">
+           <div className="space-y-4 border-t border-substrate-900 pt-6">
+              <h4 className="mono-label !text-[8px] sm:!text-[9px]">Observation Gaps Identified</h4>
+              <div className="space-y-4 max-h-[300px] lg:max-h-none overflow-y-auto pr-1 scrollbar-hide">
                  <AnimatePresence mode="popLayout">
-                   {probesFound.length > 0 ? (
-                     probesFound.map((gap, i) => (
-                       <motion.div 
-                        key={gap.id}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 10 }}
-                        className="flex flex-col gap-2 p-4 bg-white/5 border-l-2 border-white/20 transition-colors"
-                       >
-                         <div className="flex justify-between items-center">
-                            <span className="mono-label !text-[7px] text-white/40">SRC::{gap.source}</span>
-                            <span className={`text-[7px] font-mono px-2 py-0.5 border ${
-                               gap.severity === 'HIGH' ? 'border-red-500 text-red-500' : 
-                               gap.severity === 'MEDIUM' ? 'border-orange-500 text-orange-500' : 'border-blue-500 text-blue-500'
-                            }`}>{gap.severity}</span>
-                         </div>
-                         <p className="text-[10px] text-white font-bold tracking-widest uppercase">{gap.phenomenon}</p>
-                         <p className="text-[9px] text-substrate-400 leading-relaxed italic">{gap.description}</p>
-                       </motion.div>
-                     ))
-                   ) : (
-                     <p className="text-[10px] text-substrate-700 italic uppercase tracking-widest">Awaiting substrate probe...</p>
-                   )}
+                    {hasProbed ? (
+                      probesFound.length > 0 ? (
+                        probesFound.map((gap) => (
+                          <motion.div 
+                           key={gap.id}
+                           initial={{ opacity: 0, x: -10 }}
+                           animate={{ opacity: 1, x: 0 }}
+                           exit={{ opacity: 0, x: 10 }}
+                           className="flex flex-col gap-2 p-4 bg-white/5 border-l-2 border-white/20 transition-colors rounded-sm"
+                          >
+                            <div className="flex justify-between items-center gap-2">
+                               <span className="mono-label !text-[7px] text-white/40 truncate shrink">SRC::{gap.source}</span>
+                               <span className={`text-[7px] font-mono px-2 py-0.5 border shrink-0 ${
+                                  gap.severity === 'HIGH' ? 'border-red-500 text-red-500 font-bold' : 
+                                  gap.severity === 'MEDIUM' ? 'border-orange-500 text-orange-500' : 'border-blue-500 text-blue-500'
+                               }`}>{gap.severity}</span>
+                            </div>
+                            <p className="text-[10px] text-white font-bold tracking-widest uppercase">{gap.phenomenon}</p>
+                            <p className="text-[9px] text-substrate-400 leading-relaxed italic">{gap.description}</p>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <div className="p-4 bg-accent-green/5 border border-accent-green/20 rounded-sm">
+                          <p className="text-[9px] text-accent-green font-mono uppercase tracking-widest text-center font-bold">
+                            ✔ Perfect Symmetry: No Gaps Found
+                          </p>
+                        </div>
+                      )
+                    ) : (
+                      <p className="text-[10px] text-substrate-700 italic uppercase tracking-widest text-center py-6">
+                        Awaiting substrate probe...
+                      </p>
+                    )}
                  </AnimatePresence>
               </div>
            </div>

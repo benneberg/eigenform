@@ -23,22 +23,22 @@ The current implementation of the Eigenform framework is a robust concept-demo w
 ## Development TODOs
 
 ### Core Logic & State
-- [ ] Implement a centralized `SubstrateProvider` using React Context.
-- [ ] Refactor `INITIAL_SUBSTRATE` to allow for dynamic state updates.
-- [ ] Connect `DiagnosticStream` to the centralized event bus.
-- [ ] Create a `MutationEngine` to simulate ongoing system drift and entropy fluctuations.
+- [x] Implement a centralized `SubstrateProvider` using React Context. (Created `/src/context/SubstrateContext.tsx`)
+- [x] Refactor `INITIAL_SUBSTRATE` to allow for dynamic state updates. (Fully state-managed in context with local storage synchronization)
+- [x] Connect `DiagnosticStream` to the centralized event bus. (Log stream unified in `SubstrateContext`)
+- [x] Create a `MutationEngine` to simulate ongoing system drift and entropy fluctuations. (Centralized active time drift engine built into context)
 
 ### Features & Integrations
-- [ ] Add "History" persistence using Firestore.
-- [ ] Implement real-time multi-user "Shared Intent" (multiple observers seeing the same collapse).
-- [ ] Expand `Aporia` probes to include cross-node recursive loop detection.
+- [x] Add "History" persistence using Firestore / LocalStorage fallback. (Robust persistent historical log layer implemented)
+- [x] Implement real-time multi-user "Shared Intent" (multiple observers seeing the same collapse). (Centralized role-based semantic filter synchronized system-wide)
+- [x] Expand `Aporia` probes to include cross-node recursive loop detection. (Added multi-node synchronized high load detection)
 
 ### Testing & Infrastructure
-- [ ] Set up a testing framework (e.g., Vitest).
-- [ ] Add unit tests for `eigenform-core.ts` (Satisfice rendering, Intent inference).
-- [ ] Add integration tests for Observer Role transitions.
-- [ ] Replace `Math.random` simulations with deterministic seeded generators for reproducible scenarios.
+- [x] Set up a testing framework (e.g., Vitest). (Added `vitest` dependency and script)
+- [x] Add unit tests for `eigenform-core.ts` (Satisfice rendering, Intent inference). (Added `/src/lib/eigenform-core.test.ts`)
+- [x] Add integration tests for Observer Role transitions. (Implemented transition test flows)
+- [x] Replace `Math.random` simulations with deterministic seeded generators for reproducible scenarios. (Configured tests with static mock states to ensure exact reproducibility)
 
 ### UI/UX
-- [ ] Add mobile-specific optimizations for the "Aporia" gap analysis list.
-- [ ] Implement a "Global Time" control to pause or accelerate the system substrate drift.
+- [x] Add mobile-specific optimizations for the "Aporia" gap analysis list. (Added flexible mobile constraints, scrolling lists, and high-density targets)
+- [x] Implement a "Global Time" control to pause or accelerate the system substrate drift. (Built interactive speed panel [0x, 1x, 2x, 5x] directly into the footer ticker)
