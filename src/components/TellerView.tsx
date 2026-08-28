@@ -35,7 +35,7 @@ export default function TellerView() {
                 <div className="w-2 h-2 bg-accent-green animate-pulse" />
                 <span className="mono-label !text-[8px] md:!text-[10px]">Active Observation Stream :: {activeRole} lens</span>
               </div>
-              <span className="mono-label opacity-40 !text-[8px] md:!text-[10px]">SITUATION_拓扑 :: NARRATIVE_FLOW</span>
+              <span className="mono-label opacity-40 !text-[8px] md:!text-[10px]">SITUATION_TOPOLOGY :: NARRATIVE_FLOW</span>
            </div>
            
            <div className="flex-1 p-4 md:p-6 space-y-6 overflow-y-auto font-mono scrollbar-hide relative z-10">
