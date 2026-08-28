@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { CONCEPTS } from "../types";
+import { useSubstrate } from "../context/SubstrateContext";
 
 // Bespoke Brutalist SVG Icons
 function EigenformIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -69,8 +70,19 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 };
 
 export default function Sidebar({ activeId, onSelect }: SidebarProps) {
+  const { triggerManualCollapse, nodes } = useSubstrate();
+
+  const handleObservePulse = () => {
+    // Pick the most stressed active node or the first node to force a state observation collapse
+    const activeNodes = nodes.filter(n => n.status === "ACTIVE");
+    const target = activeNodes.sort((a, b) => b.load - a.load)[0] || nodes[0];
+    if (target) {
+      triggerManualCollapse(target.id);
+    }
+  };
+
   return (
-    <div className="w-full md:w-80 border-b md:border-b-0 md:border-r border-substrate-800 p-4 md:p-10 flex flex-row md:flex-col gap-6 md:gap-12 bg-substrate-950 z-20 items-center md:items-start shrink-0 overflow-x-auto md:overflow-x-visible scrollbar-hide">
+    <div className="w-full md:w-80 border-b md:border-b-0 md:border-r border-substrate-800 p-4 md:p-10 flex flex-row md:flex-col gap-6 md:gap-12 bg-substrate-950 z-20 items-center md:items-start shrink-0 overflow-x-auto md:overflow-x-visible scrollbar-hide" role="navigation" aria-label="Eigenform Navigation Sidebar">
       <div className="space-y-4 shrink-0 hidden md:block">
         <div className="w-12 h-12 brutalist-border flex items-center justify-center font-bold text-white italic aspect-square">
           EF
@@ -87,6 +99,8 @@ export default function Sidebar({ activeId, onSelect }: SidebarProps) {
             <button
               key={concept.id}
               onClick={() => onSelect(concept.id)}
+              aria-label={`View ${concept.name} concept: ${concept.principle}`}
+              aria-pressed={isActive}
               className={`group text-left transition-all relative whitespace-nowrap md:whitespace-normal shrink-0 flex items-center md:items-start gap-3 md:gap-4 ${
                 isActive ? "text-white" : "text-substrate-600 hover:text-substrate-400"
               }`}
@@ -130,7 +144,12 @@ export default function Sidebar({ activeId, onSelect }: SidebarProps) {
       </nav>
 
       <div className="pt-0 md:pt-8 md:border-t border-substrate-900 shrink-0">
-        <button className="border border-substrate-200 px-4 md:px-6 py-2 md:py-3 text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-substrate-200 hover:bg-substrate-200 hover:text-black transition-colors whitespace-nowrap">
+        <button 
+          onClick={handleObservePulse}
+          title="Force observation collapse on active substrate node"
+          aria-label="Force observation collapse on active substrate node"
+          className="border border-substrate-200 px-4 md:px-6 py-2 md:py-3 text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-substrate-200 hover:bg-substrate-200 hover:text-black transition-colors whitespace-nowrap active:scale-95"
+        >
           Observe
         </button>
       </div>

@@ -62,6 +62,24 @@ export interface ConceptDefinition {
   principle: string;
 }
 
+export type ScenarioKey = "NOMINAL" | "CASCADE_AVALANCHE" | "QUIESCENCE" | "ZERO_DAY";
+
+export interface ScenarioPreset {
+  id: ScenarioKey;
+  title: string;
+  description: string;
+  role: ObserverRole;
+  nodes: SubstrateNode[];
+}
+
+export interface ObserverProfile {
+  id: string;
+  name: string;
+  role: ObserverRole;
+  intent: ObserverIntent;
+  description: string;
+}
+
 export const CONCEPTS: ConceptDefinition[] = [
   { id: "eigenform", name: "Eigenform", principle: "Observer-dependent collapse of system meaning" },
   { id: "satisfice", name: "Satisfice", principle: "Minimum meaningful substrate for context" },

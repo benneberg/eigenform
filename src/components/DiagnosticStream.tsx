@@ -53,10 +53,12 @@ export default function DiagnosticStream() {
         <span className="mono-label !text-[8px] text-substrate-400 uppercase tracking-widest hidden sm:inline">
           Global Time:
         </span>
-        <div className="flex items-center bg-black border border-substrate-800 p-0.5">
+        <div className="flex items-center bg-black border border-substrate-800 p-0.5" role="group" aria-label="Substrate drift speed controls">
           <button
             onClick={() => setDriftSpeed(0)}
-            title="Pause Substrate Drift"
+            title="Pause Substrate Drift (Shortcut: P)"
+            aria-label="Pause Substrate Drift"
+            aria-pressed={driftSpeed === 0}
             className={`p-1 transition-all ${
               driftSpeed === 0 ? "bg-red-500 text-black font-bold" : "text-substrate-500 hover:text-white"
             }`}
@@ -68,6 +70,8 @@ export default function DiagnosticStream() {
               key={speed}
               onClick={() => setDriftSpeed(speed)}
               title={`Set Drift Speed to ${speed}x`}
+              aria-label={`Set Drift Speed to ${speed}x`}
+              aria-pressed={driftSpeed === speed}
               className={`px-1.5 py-0.5 text-[8px] font-mono transition-all font-bold ${
                 driftSpeed === speed ? "bg-accent-green text-black" : "text-substrate-500 hover:text-white"
               }`}
