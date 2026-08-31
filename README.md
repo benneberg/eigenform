@@ -1,5 +1,15 @@
 # Eigenform: Observer-Relative Adaptive Systems Framework
 
+> A conceptual framework and intent-driven substrate for dynamic topology, situational instantiation, and dual-channel narration.
+
+[![CI](https://github.com/benneberg/eigenform/actions/workflows/ci.yml/badge.svg)](https://github.com/benneberg/eigenform/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.0-61DAFB.svg)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF.svg)](https://vitejs.dev/)
+
+---
+
 Eigenform is an **Observer-Relative Adaptive Systems Framework** designed to model complex systems where "meaning" is not an intrinsic property of a substrate, but an emergent phenomenon created through the interaction between an observer and an underlying data plane.
 
 Built upon cybernetic theory and von Foerster's eigenform principles, this application provides an interactive, real-time simulation of system state collapse, situational service instantiation, non-judgmental observational narration, and observability gap detection.
